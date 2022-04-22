@@ -2,11 +2,11 @@ import { Container } from '@mantine/core';
 import { DetailedSearch } from '../Components/detailedSearch';
 import { GeneralSearch } from '../Components/generalSearch';
 
-export function Test() {
+export function SearchPage() {
   return (
-    <Container>
+    <Container size={400} px={0}>
       <GeneralSearch />
-      <DetailedSearch />
+      {/* <DetailedSearch /> */}
     </Container>
   );
 }

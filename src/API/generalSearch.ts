@@ -17,30 +17,39 @@ type GeneralSearchResponse = {
     showImage: boolean;
     title: string;
     webImage: { url: string; height: number; width: number };
-  };
+  }[];
 };
 
-export const getGeneralSearch = async (searchTerm: string) => {
+export const getGeneralSearch = async (searchTerm: string | undefined) => {
   try {
     const response = await axios.get<GeneralSearchResponse>(
       `https://www.rijksmuseum.nl/api/nl/collection?key=${API_KEY}`,
       {
         params: {
-          culture: 'en',
           ps: 30,
           q: searchTerm,
         },
       },
     );
-
-    return response.data.artObjects;
+    return response.data;
   } catch (error) {
     console.log(error);
   }
 };
 
-export function useGeneralStearch(searchTerm: string) {
+export function useGeneralSearch(searchTerm: string | undefined) {
   return useQuery(['generalSearch', searchTerm], () =>
     getGeneralSearch(searchTerm),
   );
+}
+
+export function useArtistOptions(searchTerm: string | undefined) {
+  return useQuery<
+    GeneralSearchResponse | undefined,
+    unknown,
+    string[] | undefined
+  >(['generalSearch', searchTerm], () => getGeneralSearch(searchTerm), {
+    select: (data) =>
+      data?.artObjects?.map((item) => item.principalOrFirstMaker),
+  });
 }

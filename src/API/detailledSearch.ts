@@ -11,6 +11,7 @@ type QueryTypes = {
         material: string | undefined;
         technique: string | undefined;
         toppieces: boolean | undefined;
+        place: string | undefined;
       }
     | undefined;
 };
@@ -18,28 +19,28 @@ type QueryTypes = {
 export const getSearchRequest = async ({ searchQuery }: QueryTypes) => {
   try {
     const response = await axios.get(
-      `https://www.rijksmuseum.nl/api/nl/collection?key=${API_KEY}`,
+      `https://www.rijksmuseum.nl/api/en/collection?key=${API_KEY}`,
       {
         params: {
-          culture: 'en',
           p: 0,
           ps: 20,
-          // involvedMaker: searchQuery?.involvedMaker,
+          involvedMaker: searchQuery?.involvedMaker,
           type: searchQuery?.type,
-          // material: searchQuery?.material,
-          // technique: searchQuery?.technique,
+          place: searchQuery?.place,
+          material: searchQuery?.material,
+          technique: searchQuery?.technique,
         },
       },
     );
 
-    return response;
+    return response.data;
   } catch (error) {
     console.log(error);
   }
 };
 
 export function useGetSearchRequest({ searchQuery }: QueryTypes) {
-  return useQuery(['searchRequest', searchQuery], () =>
+  return useQuery(['detailledSearch', searchQuery], () =>
     getSearchRequest({ searchQuery }),
   );
 }

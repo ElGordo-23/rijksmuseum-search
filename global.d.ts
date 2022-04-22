@@ -3,3 +3,8 @@ declare namespace NodeJS {
     REACT_APP_API_KEY: string;
   }
 }
+
+declare module '*.json' {
+  const value: any;
+  export default value;
+}
