@@ -3,7 +3,7 @@ import { useQuery } from 'react-query';
 
 const API_KEY = process.env.REACT_APP_API_KEY;
 
-type Artpiece = {
+export type Artpiece = {
   artObject: {
     acquisition: { method: string; date: Date; creditLine: string };
     colors: { percentage: number; hex: string }[];
@@ -26,7 +26,9 @@ type Artpiece = {
     location: string;
     makers: string[];
     materials: string[];
+    normalizedColors: { percentage: number; hex: string }[];
     objectTypes: string[];
+    objectNumber: string;
     physicalMedium: string;
     plaqueDescriptionEnglish: string;
     principalMaker: string;
@@ -60,7 +62,7 @@ export const getSingleArtpiece = async (objectNumber: string | undefined) => {
     const response = await axios.get<Artpiece>(
       `https://www.rijksmuseum.nl/api/en/collection/${objectNumber}?key=${API_KEY}`,
     );
-    return response.data;
+    return response.data.artObject;
   } catch (error) {
     console.log(error);
   }

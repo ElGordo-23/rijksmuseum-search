@@ -6,7 +6,6 @@ const API_KEY = process.env.REACT_APP_API_KEY;
 type QueryTypes = {
   searchQuery:
     | {
-        involvedMaker: string | undefined;
         type: string | undefined;
         material: string | undefined;
         technique: string | undefined;
@@ -16,7 +15,10 @@ type QueryTypes = {
     | undefined;
 };
 
-export const getSearchRequest = async ({ searchQuery }: QueryTypes) => {
+export const getSearchRequest = async (
+  { searchQuery }: QueryTypes,
+  involvedMaker: string | undefined,
+) => {
   try {
     const response = await axios.get(
       `https://www.rijksmuseum.nl/api/en/collection?key=${API_KEY}`,
@@ -24,7 +26,7 @@ export const getSearchRequest = async ({ searchQuery }: QueryTypes) => {
         params: {
           p: 0,
           ps: 20,
-          involvedMaker: searchQuery?.involvedMaker,
+          involvedMaker: involvedMaker,
           type: searchQuery?.type,
           place: searchQuery?.place,
           material: searchQuery?.material,
@@ -39,8 +41,11 @@ export const getSearchRequest = async ({ searchQuery }: QueryTypes) => {
   }
 };
 
-export function useGetSearchRequest({ searchQuery }: QueryTypes) {
-  return useQuery(['detailledSearch', searchQuery], () =>
-    getSearchRequest({ searchQuery }),
+export function useGetSearchRequest(
+  { searchQuery }: QueryTypes,
+  involvedMaker: string | undefined,
+) {
+  return useQuery(['detailledSearch', searchQuery, involvedMaker], () =>
+    getSearchRequest({ searchQuery }, involvedMaker),
   );
 }

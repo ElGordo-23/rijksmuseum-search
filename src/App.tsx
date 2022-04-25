@@ -13,6 +13,7 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <MantineProvider
+        theme={{ fontFamily: 'Helvetica' }}
         defaultProps={{
           Container: {
             sizes: {
@@ -23,9 +24,6 @@ function App() {
               xl: 1320,
             },
           },
-        }}
-        theme={{
-          spacing: { xs: 15, sm: 20, md: 25, lg: 30, xl: 40 },
         }}
       >
         <Container>

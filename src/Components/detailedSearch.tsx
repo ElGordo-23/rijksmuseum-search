@@ -8,8 +8,9 @@ import {
 } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useParams } from 'react-router';
 import { useGetSearchRequest } from '../API/detailledSearch';
-import { useGetSearchSuggestions } from '../API/getSearchSuggestions';
+import * as materials from '../util/materials.json';
 
 type SearchValues = {
   involvedMaker: string;
@@ -25,40 +26,37 @@ export function DetailedSearch() {
 
   const [searchQuery, setSearchQuery] = useState<SearchValues>();
 
-  const [artistSearch, setArtistSearch] = useState<string | null>(null);
+  const { involvedMaker } = useParams();
 
-  const { data: searchResult } = useGetSearchRequest({ searchQuery });
+  const { data: searchResult } = useGetSearchRequest(
+    { searchQuery },
+    involvedMaker,
+  );
 
-  // function uniq() {
-  //   const oldArray: {}[] = allArtists.artists;
-  //   return Array.from(new Set(oldArray));
-  // }
+  // const material = materials?.map((item) => item.name);
+
+  console.log(materials);
 
   return (
     <>
-      <h2>Detailled Search</h2>
       <form
         onSubmit={handleSubmit((data) => {
-          setSearchQuery(data);
+          console.log(data);
         })}
       >
-        <TextInput
-          placeholder="Look up works by Artist"
-          label="Artist"
-          {...register('involvedMaker')}
-        />
         <TextInput
           placeholder="Type of Object"
           label="Type"
           {...register('type')}
         />
-        <TextInput
+        <Select
           placeholder="Material of Object"
           label="Material"
-          {...register('material')}
+          searchable
+          data={[]}
         />{' '}
         <TextInput
-          placeholder="Location of"
+          placeholder="Location of Creation"
           label="Place"
           {...register('place')}
         />
@@ -66,14 +64,6 @@ export function DetailedSearch() {
           placeholder="Technique used"
           label="Technique"
           {...register('technique')}
-        />
-        <Select
-          label="Artist"
-          placeholder="Artist"
-          searchable
-          nothingFound="No options"
-          data={[]}
-          onChange={(value) => setArtistSearch(value)}
         />
         <Button type="submit">Search</Button>
       </form>
