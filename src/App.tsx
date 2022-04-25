@@ -5,6 +5,7 @@ import { ReactQueryDevtools } from 'react-query/devtools';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { Results } from './Pages/Results';
 import { SearchPage } from './Pages/SearchPage';
+import { SingleArtpiece } from './Pages/SingleArtpiece';
 
 function App() {
   const queryClient = new QueryClient();
@@ -32,6 +33,10 @@ function App() {
             <Routes>
               <Route path="/" element={<SearchPage />} />
               <Route path="/results/:searchTerm" element={<Results />} />
+              <Route
+                path="/artPiece/:objectNumber"
+                element={<SingleArtpiece />}
+              />
             </Routes>
           </Router>
         </Container>

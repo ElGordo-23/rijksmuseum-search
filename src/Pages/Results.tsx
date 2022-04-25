@@ -1,6 +1,7 @@
-import { Container, createStyles, Grid } from '@mantine/core';
+import { createStyles, Grid, SimpleGrid } from '@mantine/core';
 import { useEffect } from 'react';
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
+import { Link } from 'react-router-dom';
 import { useGeneralSearch } from '../API/generalSearch';
 
 const useStyles = createStyles(() => ({
@@ -10,37 +11,46 @@ const useStyles = createStyles(() => ({
     height: '100%',
   },
   child: {
-    minHeight: 450,
+    minHeight: '3rem',
     maxWidth: 250,
     display: 'flex',
     flexDirection: 'column',
+    gap: 10,
+    backgroundColor: '#faf8e6',
+    backgroundSize: 'cover',
+    padding: 15,
   },
   image: {
-    minHeight: 300,
-    objectFit: 'cover',
+    maxWidth: '100%',
+    height: 300,
+    objectFit: 'contain',
   },
 }));
 
 export function Results() {
   const { searchTerm } = useParams();
   const { classes } = useStyles();
+  const navigate = useNavigate();
 
   const { data: searchResult } = useGeneralSearch(searchTerm);
 
-  useEffect(() => console.log(searchResult), [searchResult]);
-
   return (
-    <Grid className={classes.wrapper} gutter={20} columns={4}>
-      {searchResult?.artObjects.map((item) => (
-        <Grid.Col className={classes.child}>
-          <img
-            src={item.headerImage.url}
-            alt="artwork"
-            className={classes.image}
-          />
-          <div>{item.title}</div>
-        </Grid.Col>
-      ))}
-    </Grid>
+    <div>
+      <h2>{searchTerm}</h2>
+      <SimpleGrid className={classes.wrapper} cols={3}>
+        {searchResult?.artObjects.map((item) => (
+          <div className={classes.child}>
+            <img
+              src={item.headerImage.url}
+              alt="artwork"
+              className={classes.image}
+              onClick={() => navigate(`/artPiece/${item.objectNumber}`)}
+            />
+            <div>{item.longTitle}</div>
+            <div>{item.principalOrFirstMaker}</div>
+          </div>
+        ))}
+      </SimpleGrid>
+    </div>
   );
 }

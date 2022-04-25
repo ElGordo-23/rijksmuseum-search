@@ -10,18 +10,31 @@ type SearchValues = {
 };
 
 export function GeneralSearch() {
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState<string | undefined>();
+  const [artistName, setArtistName] = useState<string | undefined>();
 
   const formMethods = useForm<SearchValues>();
   const { register, handleSubmit } = formMethods;
 
   const navigate = useNavigate();
 
+  // if (searchTerm) {
+  //   navigate(`/results/${searchTerm}`);
+  // } else if (artistName) {
+  //   navigate(`/results/${artistName}`);
+  // }
+
   return (
     <>
       <h2>General Search</h2>
       <FormProvider {...formMethods}>
-        <form onSubmit={handleSubmit((data) => setSearchTerm(data.searchTerm))}>
+        <form
+          onSubmit={handleSubmit((data) => {
+            setSearchTerm(data.searchTerm);
+            setArtistName(data.artistName);
+            console.log(data);
+          })}
+        >
           <TextInput
             {...register('searchTerm')}
             placeholder="Search"
@@ -31,7 +44,11 @@ export function GeneralSearch() {
           <Button
             type="submit"
             onClick={() => {
-              navigate(`/results/${searchTerm}`);
+              if (searchTerm) {
+                navigate(`/results/${searchTerm}`);
+              } else if (artistName) {
+                navigate(`/results/${artistName}`);
+              }
             }}
           >
             Search
