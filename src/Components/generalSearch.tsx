@@ -1,30 +1,48 @@
 import { Button, TextInput } from '@mantine/core';
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
+import { createSearchParams, useSearchParams } from 'react-router-dom';
 import { ArtistNameSelectField } from './artistNameField';
 
 type SearchValues = {
-  searchTerm: string;
-  artistName: string;
+  searchTerm: string | undefined;
+  artistName: string | undefined;
 };
 
 export function GeneralSearch() {
   const formMethods = useForm<SearchValues>();
 
-  const { register, handleSubmit } = formMethods;
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = formMethods;
 
   const navigate = useNavigate();
+  const [_, setSearchParams] = useSearchParams();
+
+  useEffect(() => setSearchParams({}), [setSearchParams]);
 
   const onValid: SubmitHandler<SearchValues> = useCallback(
-    ({ searchTerm, artistName }) => {
-      if (searchTerm) {
-        navigate(`/results/${searchTerm}`);
-      } else if (artistName) {
-        navigate(`/results/${artistName}`);
-      }
+    (search) => {
+      const cleanedSearchValues = Object.entries(search).reduce(
+        (cleaned, [key, value]) => {
+          if (value) {
+            return { ...cleaned, [key]: value };
+          }
+          return cleaned;
+        },
+        {},
+      );
+      setSearchParams(cleanedSearchValues);
+
+      navigate({
+        pathname: '/results',
+        search: createSearchParams(cleanedSearchValues).toString(),
+      });
     },
-    [navigate],
+    [setSearchParams, navigate],
   );
 
   return (
@@ -33,7 +51,10 @@ export function GeneralSearch() {
       <FormProvider {...formMethods}>
         <form onSubmit={handleSubmit(onValid)}>
           <TextInput
-            {...register('searchTerm')}
+            {...register('searchTerm', {
+              required: 'Please enter a Search Term',
+            })}
+            {...(errors.searchTerm && <p>{errors.searchTerm.message}</p>)}
             placeholder="Search"
             label="Search for an arbitrary Term "
           />

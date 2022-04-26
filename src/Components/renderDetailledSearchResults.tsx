@@ -1,22 +1,26 @@
 import { Card, CardSection, Image, SimpleGrid, Text } from '@mantine/core';
 import { Link } from 'react-router-dom';
-import { useGeneralSearch } from '../API/generalSearch';
+import { useGetDetailledSearch } from '../API/detailledSearch';
 
-type PropTypes = {
-  searchTerm: string | null;
-  artistName: string | null;
+type SearchValues = {
+  searchQuery: {
+    type: string;
+    material: string;
+    place: string;
+    technique: string;
+    involvedMaker: string | null;
+  };
 };
 
-export function GeneralSearchResults({ searchTerm, artistName }: PropTypes) {
-  const { data: generalSearchResult } = useGeneralSearch(
-    searchTerm,
-    artistName,
-  );
+export function DetailledSearchResults({ searchQuery }: SearchValues) {
+  const { data: detailledSearchResults } = useGetDetailledSearch({
+    searchQuery,
+  });
 
   return (
     <>
       <SimpleGrid cols={3}>
-        {generalSearchResult?.artObjects?.map((item) => (
+        {detailledSearchResults?.artObjects?.map((item) => (
           <Card<typeof Link>
             component={Link}
             to={`/artPiece/${item.objectNumber}`}

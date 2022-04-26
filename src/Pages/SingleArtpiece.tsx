@@ -10,7 +10,7 @@ export function SingleArtpiece() {
 
   return (
     <Box sx={{ marginTop: 24, marginBottom: 24 }}>
-      <Image src={artPiece?.webImage.url} alt={`${artPiece?.title}`} />
+      <Image src={artPiece?.webImage?.url} alt={`${artPiece?.title}`} />
       <Text
         size="lg"
         weight="semibold"

@@ -20,10 +20,7 @@ export type GeneralSearchResponse = {
   }[];
 };
 
-export const getGeneralSearch = async (
-  searchTerm: string | null,
-  artistName: string | null,
-) => {
+const getGeneralSearch = async (searchTerm: string | undefined) => {
   try {
     const response = await axios.get<GeneralSearchResponse>(
       `https://www.rijksmuseum.nl/api/nl/collection?key=${API_KEY}`,
@@ -31,7 +28,6 @@ export const getGeneralSearch = async (
         params: {
           ps: 30,
           q: searchTerm,
-          involvedMaker: artistName,
         },
       },
     );
@@ -41,11 +37,13 @@ export const getGeneralSearch = async (
   }
 };
 
-export function useGeneralSearch(
-  searchTerm: string | null,
-  artistName: string | null,
-) {
-  return useQuery(['generalSearch', searchTerm, artistName], () =>
-    getGeneralSearch(searchTerm, artistName),
-  );
+export function useArtistOptions(searchTerm: string | undefined) {
+  return useQuery<
+    GeneralSearchResponse | undefined,
+    unknown,
+    string[] | undefined
+  >(['generalSearch', searchTerm], () => getGeneralSearch(searchTerm), {
+    select: (data) =>
+      data?.artObjects?.map((item) => item.principalOrFirstMaker),
+  });
 }

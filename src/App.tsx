@@ -30,7 +30,7 @@ function App() {
           <Router>
             <Routes>
               <Route path="/" element={<SearchPage />} />
-              <Route path="/results/:searchTerm" element={<Results />} />
+              <Route path="/results" element={<Results />} />
               <Route
                 path="/artPiece/:objectNumber"
                 element={<SingleArtpiece />}

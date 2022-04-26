@@ -1,40 +1,36 @@
-import { Button, Select } from '@mantine/core';
-import { useCallback, useMemo, useState } from 'react';
+import { Button, Select, TextInput } from '@mantine/core';
+import { useCallback, useMemo } from 'react';
 import {
   Controller,
   FormProvider,
   SubmitHandler,
   useForm,
 } from 'react-hook-form';
-import { useParams } from 'react-router';
-import { useGetSearchRequest } from '../API/detailledSearch';
+import { useNavigate } from 'react-router';
+import { createSearchParams, useSearchParams } from 'react-router-dom';
 import { craftTypes } from '../util/craftTypes';
 import { materials } from '../util/materials';
 import { places } from '../util/places';
 import { techniques } from '../util/techniques';
 
-type SearchValues = {
-  involvedMaker: string;
+export type SearchValues = {
+  involvedMaker: string | null;
   type: string;
   material: string;
   place: string;
   technique: string;
 };
 
-export function DetailedSearch() {
+type PropType = {
+  involvedMaker: string | null;
+};
+
+export function DetailedSearch({ involvedMaker }: PropType) {
   const formMethods = useForm<SearchValues>();
-  const { handleSubmit } = formMethods;
+  const { register, handleSubmit } = formMethods;
 
-  const [searchQuery, setSearchQuery] = useState<SearchValues>();
-
-  const { searchTerm: involvedMaker } = useParams();
-
-  const { data: detailledSearchResults } = useGetSearchRequest(
-    { searchQuery },
-    involvedMaker,
-  );
-
-  console.log(detailledSearchResults);
+  const navigate = useNavigate();
+  const [_, setSearchParams] = useSearchParams();
 
   const matertialSelect = useMemo(() => materials.map((item) => item.name), []);
   const typeSelect = useMemo(() => craftTypes.map((item) => item.name), []);
@@ -45,14 +41,38 @@ export function DetailedSearch() {
     [],
   );
 
-  const onValid: SubmitHandler<SearchValues> = useCallback((data) => {
-    setSearchQuery(data);
-  }, []);
+  const onValid: SubmitHandler<SearchValues> = useCallback(
+    (search) => {
+      const cleanedSearchValues = Object.entries(search).reduce(
+        (cleaned, [key, value]) => {
+          if (value) {
+            return { ...cleaned, [key]: value };
+          }
+          return cleaned;
+        },
+        {},
+      );
+      setSearchParams(cleanedSearchValues);
+
+      navigate({
+        pathname: '/results',
+        search: createSearchParams(cleanedSearchValues).toString(),
+      });
+    },
+    [setSearchParams, navigate],
+  );
 
   return (
     <>
       <FormProvider {...formMethods}>
         <form onSubmit={handleSubmit(onValid)}>
+          {involvedMaker ? (
+            <TextInput
+              defaultValue={involvedMaker}
+              label="Artist"
+              {...register('involvedMaker')}
+            />
+          ) : null}
           <Controller
             name="type"
             render={({ field }) => (
