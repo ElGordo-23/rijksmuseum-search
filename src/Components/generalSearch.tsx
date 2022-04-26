@@ -11,6 +11,7 @@ type SearchValues = {
 
 export function GeneralSearch() {
   const formMethods = useForm<SearchValues>();
+
   const { register, handleSubmit } = formMethods;
 
   const navigate = useNavigate();

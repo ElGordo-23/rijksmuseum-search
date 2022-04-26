@@ -9,7 +9,6 @@ type QueryTypes = {
         type: string | undefined;
         material: string | undefined;
         technique: string | undefined;
-        toppieces: boolean | undefined;
         place: string | undefined;
       }
     | undefined;
