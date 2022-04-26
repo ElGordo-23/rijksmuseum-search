@@ -1,5 +1,5 @@
 import { Button, TextInput } from '@mantine/core';
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
 import { ArtistNameSelectField } from './artistNameField';
