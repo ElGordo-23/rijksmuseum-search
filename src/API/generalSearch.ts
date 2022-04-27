@@ -23,12 +23,14 @@ export type GeneralSearchResponse = {
 export const getGeneralSearch = async (
   searchTerm: string | null,
   artistName: string | null,
+  page: number | null,
 ) => {
   try {
     const response = await axios.get<GeneralSearchResponse>(
       `https://www.rijksmuseum.nl/api/nl/collection?key=${API_KEY}`,
       {
         params: {
+          p: page,
           ps: 30,
           q: searchTerm,
           involvedMaker: artistName,
@@ -44,8 +46,11 @@ export const getGeneralSearch = async (
 export function useGeneralSearch(
   searchTerm: string | null,
   artistName: string | null,
+  page: number | null,
 ) {
-  return useQuery(['generalSearch', searchTerm, artistName], () =>
-    getGeneralSearch(searchTerm, artistName),
+  return useQuery(
+    ['generalSearch', searchTerm, artistName, page],
+    () => getGeneralSearch(searchTerm, artistName, page),
+    { keepPreviousData: true },
   );
 }

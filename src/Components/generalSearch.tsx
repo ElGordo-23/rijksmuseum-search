@@ -1,16 +1,21 @@
-import { Button, TextInput } from '@mantine/core';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { Box, Button, TextInput } from '@mantine/core';
 import { useCallback, useEffect } from 'react';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
 import { createSearchParams, useSearchParams } from 'react-router-dom';
-import { StringParam, useQueryParams } from 'use-query-params';
+import { object, string } from 'yup';
 import { ArtistNameSelectField } from './artistNameField';
 import { SearchValuesObject } from './renderDetailledSearchResults';
 
 type SearchValues = Pick<SearchValuesObject, 'involvedMaker' | 'searchTerm'>;
 
 export function GeneralSearch() {
-  const formMethods = useForm<SearchValues>();
+  const schema = object({
+    searchTerm: string().required('Please enter a Search'),
+  });
+
+  const formMethods = useForm<SearchValues>({ resolver: yupResolver(schema) });
 
   const {
     register,
@@ -50,14 +55,11 @@ export function GeneralSearch() {
       <FormProvider {...formMethods}>
         <form onSubmit={handleSubmit(onValid)}>
           <TextInput
-            {...register('searchTerm', {
-              required: 'Please enter a Search Term',
-            })}
-            // {...(errors.searchTerm && <p>{errors.searchTerm.message}</p>)}
+            {...register('searchTerm')}
             placeholder="Search"
             label="Search for an arbitrary Term "
-            required
           />
+          <Box>{errors.searchTerm?.message}</Box>
           <ArtistNameSelectField />
           <Button type="submit">Search</Button>
         </form>

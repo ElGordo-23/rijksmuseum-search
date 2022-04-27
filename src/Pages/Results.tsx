@@ -1,6 +1,7 @@
 import { Button, Collapse } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router';
 import { useSearchParams } from 'react-router-dom';
 import { DetailedSearch } from '../Components/detailedSearch';
 import {
@@ -11,6 +12,8 @@ import { GeneralSearchResults } from '../Components/renderGeneralSearchResults';
 
 export function Results() {
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+
   const [searchQuery, setSearchQuery] = useState<SearchValuesObject>();
 
   const searchParamsObject = Object.fromEntries(
@@ -21,15 +24,14 @@ export function Results() {
     defaultValues: searchParamsObject,
   });
 
-  useEffect(() => {
-    console.log(searchParamsObject);
-  }, [searchParamsObject]);
+  useEffect(() => {}, [searchParamsObject]);
 
   const searchTerm = searchParams.get('searchTerm');
 
   const involvedMaker = searchParams.get('involvedMaker');
 
   const [opened, setOpen] = useState(false);
+
   const showGeneralResults = !searchQuery && (searchTerm || involvedMaker);
 
   return (
@@ -38,7 +40,9 @@ export function Results() {
       <div>{searchTerm}</div>
       {involvedMaker ? <div>{involvedMaker}</div> : null}
       <br />
-
+      <Button onClick={() => navigate('/')}>Home</Button>
+      <br />
+      <br />
       <Button onClick={() => setOpen((o) => !o)}>Detailled Search</Button>
       <Collapse in={opened}>
         <DetailedSearch formMethods={formMethods} onValid={setSearchQuery} />

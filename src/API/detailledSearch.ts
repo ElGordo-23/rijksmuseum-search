@@ -7,9 +7,10 @@ const API_KEY = process.env.REACT_APP_API_KEY;
 
 type QueryTypes = {
   searchQuery: SearchValuesObject | undefined;
+  page: number;
 };
 
-export const getDetailledSearch = async ({ searchQuery }: QueryTypes) => {
+export const getDetailledSearch = async ({ searchQuery, page }: QueryTypes) => {
   try {
     const response = await axios.get<GeneralSearchResponse>(
       `https://www.rijksmuseum.nl/api/en/collection?key=${API_KEY}`,
@@ -28,8 +29,8 @@ export const getDetailledSearch = async ({ searchQuery }: QueryTypes) => {
   }
 };
 
-export function useGetDetailledSearch({ searchQuery }: QueryTypes) {
-  return useQuery(['detailledSearch', searchQuery], () =>
-    getDetailledSearch({ searchQuery }),
+export function useGetDetailledSearch({ searchQuery, page }: QueryTypes) {
+  return useQuery(['detailledSearch', searchQuery, page], () =>
+    getDetailledSearch({ searchQuery, page }),
   );
 }

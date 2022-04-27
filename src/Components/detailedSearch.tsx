@@ -1,5 +1,5 @@
 import { Button, Select, TextInput } from '@mantine/core';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import {
   Controller,
   FormProvider,
@@ -7,10 +7,8 @@ import {
   UseFormReturn,
 } from 'react-hook-form';
 import { useSearchParams } from 'react-router-dom';
-import { craftTypes } from '../util/craftTypes';
-import { materials } from '../util/materials';
-import { places } from '../util/places';
-import { techniques } from '../util/techniques';
+import { useArtistOptions } from '../API/artistOptions';
+import { useDataSuggestions } from '../util/suggestionsHelper';
 import { SearchValuesObject } from './renderDetailledSearchResults';
 
 type DetailedSearchProps = {
@@ -24,17 +22,12 @@ export function DetailedSearch({
   onValid,
   onError,
 }: DetailedSearchProps) {
-  const { register, handleSubmit } = formMethods;
+  const { register, handleSubmit, getValues } = formMethods;
 
   const [_, setSearchParams] = useSearchParams();
 
-  const matertialSelect = useMemo(() => materials.map((item) => item.name), []);
-  const typeSelect = useMemo(() => craftTypes.map((item) => item.name), []);
-  const placeSelect = useMemo(() => places.map((item) => item.name), []);
-
-  const techniqueSelect = useMemo(
-    () => techniques.map((item) => item.name),
-    [],
+  const [detailledArtistSearchInput, setDetailledArtistSearchInput] = useState(
+    getValues('involvedMaker'),
   );
 
   const onValidInternal: SubmitHandler<SearchValuesObject> = useCallback(
@@ -55,13 +48,38 @@ export function DetailedSearch({
     },
     [onValid, setSearchParams],
   );
+  const { matertialSelect, typeSelect, techniqueSelect, placeSelect } =
+    useDataSuggestions();
+
+  const { data: artistNameSuggenstions } = useArtistOptions(
+    detailledArtistSearchInput,
+  );
+
+  const artistSuggestions = useMemo(
+    () => Array.from(new Set(artistNameSuggenstions)),
+    [artistNameSuggenstions],
+  );
 
   return (
     <>
       <FormProvider {...formMethods}>
         <form onSubmit={handleSubmit(onValidInternal, onError)}>
           <TextInput label="SearchTerm" {...register('searchTerm')} />
-          <TextInput label="Artist" {...register('involvedMaker')} />
+
+          <Controller
+            name="involvedMaker"
+            render={({ field }) => (
+              <Select
+                placeholder="Type of Object"
+                label="Artist"
+                searchable
+                nothingFound="No options"
+                data={artistSuggestions}
+                {...field}
+                onSearchChange={setDetailledArtistSearchInput}
+              />
+            )}
+          />
 
           <Controller
             name="type"

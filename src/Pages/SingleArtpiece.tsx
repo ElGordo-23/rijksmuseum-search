@@ -1,4 +1,4 @@
-import { Box, Image, Text } from '@mantine/core';
+import { Box, ColorSwatch, Group, Image, Text } from '@mantine/core';
 import { useParams } from 'react-router';
 import { useSingleArtpiece } from '../API/getSingleArtpiece';
 import { ColorSpread } from '../Components/ColorSpread';
@@ -8,13 +8,17 @@ export function SingleArtpiece() {
 
   const { data: artPiece } = useSingleArtpiece(objectNumber);
 
+  const swatches = artPiece?.normalizedColors.map((color) => (
+    <ColorSwatch color={color.hex} />
+  ));
+
   return (
-    <Box sx={{ marginTop: 24, marginBottom: 24 }}>
+    <Box sx={{ marginTop: 24, marginBottom: 45 }}>
       <Image src={artPiece?.webImage?.url} alt={`${artPiece?.title}`} />
       <Text
         size="lg"
         weight="semibold"
-        sx={{ marginTop: 10, marginBottom: 10 }}
+        sx={{ marginTop: 10, marginBottom: 25 }}
       >
         {artPiece?.scLabelLine}
       </Text>
@@ -36,7 +40,10 @@ export function SingleArtpiece() {
             {artPiece?.description}
           </Text>
         </div>
-      </Box>
+      </Box>{' '}
+      <Group position="center" spacing="xs">
+        {swatches}
+      </Group>
     </Box>
   );
 }
