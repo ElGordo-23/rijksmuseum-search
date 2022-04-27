@@ -13,7 +13,7 @@ import { useSingleArtpiece } from '../API/getSingleArtpiece';
 export function SingleArtpiece() {
   const { objectNumber } = useParams();
 
-  const { data: artPiece, isLoading } = useSingleArtpiece(objectNumber);
+  const { data: artPiece } = useSingleArtpiece(objectNumber);
 
   const swatches = artPiece?.normalizedColors.map((color) => (
     <ColorSwatch color={color.hex} key={color.hex} />

@@ -29,7 +29,13 @@ export function GeneralSearchResults({ searchTerm, involvedMaker }: PropTypes) {
       {generalSearchResult?.artObjects.length === 0 ? (
         <div>No entries found</div>
       ) : (
-        <SimpleGrid cols={3}>
+        <SimpleGrid
+          breakpoints={[
+            { maxWidth: 'lg', cols: 3, spacing: 'md' },
+            { maxWidth: 'sm', cols: 2, spacing: 'sm' },
+            { maxWidth: 'xs', cols: 1, spacing: 'sm' },
+          ]}
+        >
           <Button
             onClick={() => setPage((old) => Math.max(old - 1, 0))}
             disabled={page === 1}
