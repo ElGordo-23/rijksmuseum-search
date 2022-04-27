@@ -14,7 +14,7 @@ export const ArtistNameSelectField = () => {
 
   return (
     <Controller
-      name="artistName"
+      name="involvedMaker"
       render={({ field }) => (
         <Select
           label="Artist"

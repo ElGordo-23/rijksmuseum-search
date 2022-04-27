@@ -4,32 +4,28 @@ import {
   Controller,
   FormProvider,
   SubmitHandler,
-  useForm,
+  UseFormReturn,
 } from 'react-hook-form';
-import { useNavigate } from 'react-router';
-import { createSearchParams, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import { craftTypes } from '../util/craftTypes';
 import { materials } from '../util/materials';
 import { places } from '../util/places';
 import { techniques } from '../util/techniques';
+import { SearchValuesObject } from './renderDetailledSearchResults';
 
-export type SearchValues = {
-  involvedMaker: string | null;
-  type: string;
-  material: string;
-  place: string;
-  technique: string;
+type DetailedSearchProps = {
+  formMethods: UseFormReturn<SearchValuesObject>;
+  onValid?: (values: SearchValuesObject) => void;
+  onError?: () => void;
 };
 
-type PropType = {
-  involvedMaker: string | null;
-};
-
-export function DetailedSearch({ involvedMaker }: PropType) {
-  const formMethods = useForm<SearchValues>();
+export function DetailedSearch({
+  formMethods,
+  onValid,
+  onError,
+}: DetailedSearchProps) {
   const { register, handleSubmit } = formMethods;
 
-  const navigate = useNavigate();
   const [_, setSearchParams] = useSearchParams();
 
   const matertialSelect = useMemo(() => materials.map((item) => item.name), []);
@@ -41,7 +37,7 @@ export function DetailedSearch({ involvedMaker }: PropType) {
     [],
   );
 
-  const onValid: SubmitHandler<SearchValues> = useCallback(
+  const onValidInternal: SubmitHandler<SearchValuesObject> = useCallback(
     (search) => {
       const cleanedSearchValues = Object.entries(search).reduce(
         (cleaned, [key, value]) => {
@@ -53,26 +49,20 @@ export function DetailedSearch({ involvedMaker }: PropType) {
         {},
       );
       setSearchParams(cleanedSearchValues);
-
-      navigate({
-        pathname: '/results',
-        search: createSearchParams(cleanedSearchValues).toString(),
-      });
+      if (onValid) {
+        onValid(cleanedSearchValues);
+      }
     },
-    [setSearchParams, navigate],
+    [onValid, setSearchParams],
   );
 
   return (
     <>
       <FormProvider {...formMethods}>
-        <form onSubmit={handleSubmit(onValid)}>
-          {involvedMaker ? (
-            <TextInput
-              defaultValue={involvedMaker}
-              label="Artist"
-              {...register('involvedMaker')}
-            />
-          ) : null}
+        <form onSubmit={handleSubmit(onValidInternal, onError)}>
+          <TextInput label="SearchTerm" {...register('searchTerm')} />
+          <TextInput label="Artist" {...register('involvedMaker')} />
+
           <Controller
             name="type"
             render={({ field }) => (

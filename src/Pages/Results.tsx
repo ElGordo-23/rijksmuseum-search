@@ -1,33 +1,36 @@
 import { Button, Collapse } from '@mantine/core';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { useSearchParams } from 'react-router-dom';
 import { DetailedSearch } from '../Components/detailedSearch';
-import { DetailledSearchResults } from '../Components/renderDetailledSearchResults';
+import {
+  DetailledSearchResults,
+  SearchValuesObject,
+} from '../Components/renderDetailledSearchResults';
 import { GeneralSearchResults } from '../Components/renderGeneralSearchResults';
 
 export function Results() {
   const [searchParams] = useSearchParams();
+  const [searchQuery, setSearchQuery] = useState<SearchValuesObject>();
 
-  const searchParamsArray = [...searchParams];
+  const searchParamsObject = Object.fromEntries(
+    searchParams.entries(),
+  ) as SearchValuesObject;
 
-  const searchParamsObject = Object.fromEntries(searchParamsArray);
+  const formMethods = useForm<SearchValuesObject>({
+    defaultValues: searchParamsObject,
+  });
 
-  console.log(searchParamsObject);
-
-  // const toObject = (searchParamsArray: []) => {
-  //   return Array.from(searchParamsArray).reduce(
-  //     (acc, [key, value]) => Object.assign(acc, { [key]: value }),
-  //     {},
-  //   );
-  // };
-
-  // const searchParamsObject =
+  useEffect(() => {
+    console.log(searchParamsObject);
+  }, [searchParamsObject]);
 
   const searchTerm = searchParams.get('searchTerm');
 
-  const involvedMaker = searchParams.get('artistName');
+  const involvedMaker = searchParams.get('involvedMaker');
 
   const [opened, setOpen] = useState(false);
+  const showGeneralResults = !searchQuery && (searchTerm || involvedMaker);
 
   return (
     <div>
@@ -38,18 +41,20 @@ export function Results() {
 
       <Button onClick={() => setOpen((o) => !o)}>Detailled Search</Button>
       <Collapse in={opened}>
-        <DetailedSearch involvedMaker={involvedMaker} />
+        <DetailedSearch formMethods={formMethods} onValid={setSearchQuery} />
       </Collapse>
       <br />
 
-      {[...searchParams].length === 2 ? (
+      {showGeneralResults ? (
         <GeneralSearchResults
           searchTerm={searchTerm}
-          artistName={involvedMaker}
+          involvedMaker={involvedMaker}
         />
-      ) : (
-        <DetailledSearchResults searchQuery={searchParamsObject} />
-      )}
+      ) : null}
+
+      {!showGeneralResults && searchQuery ? (
+        <DetailledSearchResults searchQuery={searchQuery} />
+      ) : null}
     </div>
   );
 }

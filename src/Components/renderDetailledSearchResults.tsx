@@ -2,14 +2,16 @@ import { Card, CardSection, Image, SimpleGrid, Text } from '@mantine/core';
 import { Link } from 'react-router-dom';
 import { useGetDetailledSearch } from '../API/detailledSearch';
 
-type SearchValues = {
-  searchQuery: {
-    type: string;
-    material: string;
-    place: string;
-    technique: string;
-    involvedMaker: string | null;
-  };
+export type SearchValuesObject = Partial<{
+  type: string;
+  material: string;
+  place: string;
+  technique: string;
+  involvedMaker: string;
+  searchTerm: string;
+}>;
+export type SearchValues = {
+  searchQuery: SearchValuesObject;
 };
 
 export function DetailledSearchResults({ searchQuery }: SearchValues) {

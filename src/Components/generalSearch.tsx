@@ -3,12 +3,11 @@ import { useCallback, useEffect } from 'react';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
 import { createSearchParams, useSearchParams } from 'react-router-dom';
+import { StringParam, useQueryParams } from 'use-query-params';
 import { ArtistNameSelectField } from './artistNameField';
+import { SearchValuesObject } from './renderDetailledSearchResults';
 
-type SearchValues = {
-  searchTerm: string | undefined;
-  artistName: string | undefined;
-};
+type SearchValues = Pick<SearchValuesObject, 'involvedMaker' | 'searchTerm'>;
 
 export function GeneralSearch() {
   const formMethods = useForm<SearchValues>();
@@ -54,9 +53,10 @@ export function GeneralSearch() {
             {...register('searchTerm', {
               required: 'Please enter a Search Term',
             })}
-            {...(errors.searchTerm && <p>{errors.searchTerm.message}</p>)}
+            // {...(errors.searchTerm && <p>{errors.searchTerm.message}</p>)}
             placeholder="Search"
             label="Search for an arbitrary Term "
+            required
           />
           <ArtistNameSelectField />
           <Button type="submit">Search</Button>

@@ -3,6 +3,7 @@ import { Container, MantineProvider } from '@mantine/core';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { QueryParamProvider } from 'use-query-params';
 import { Results } from './Pages/Results';
 import { SearchPage } from './Pages/SearchPage';
 import { SingleArtpiece } from './Pages/SingleArtpiece';
@@ -28,14 +29,16 @@ function App() {
       >
         <Container>
           <Router>
-            <Routes>
-              <Route path="/" element={<SearchPage />} />
-              <Route path="/results" element={<Results />} />
-              <Route
-                path="/artPiece/:objectNumber"
-                element={<SingleArtpiece />}
-              />
-            </Routes>
+            <QueryParamProvider>
+              <Routes>
+                <Route path="/" element={<SearchPage />} />
+                <Route path="/results" element={<Results />} />
+                <Route
+                  path="/artPiece/:objectNumber"
+                  element={<SingleArtpiece />}
+                />
+              </Routes>
+            </QueryParamProvider>
           </Router>
         </Container>
       </MantineProvider>
