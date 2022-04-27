@@ -3,6 +3,7 @@ import {
   Card,
   CardSection,
   Image,
+  Loader,
   SimpleGrid,
   Text,
 } from '@mantine/core';
@@ -25,7 +26,7 @@ export type SearchValues = {
 export function DetailledSearchResults({ searchQuery }: SearchValues) {
   const [page, setPage] = useState(1);
 
-  const { data: detailledSearchResults } = useGetDetailledSearch({
+  const { data: detailledSearchResults, isLoading } = useGetDetailledSearch({
     searchQuery,
     page,
   });
@@ -55,12 +56,16 @@ export function DetailledSearchResults({ searchQuery }: SearchValues) {
             }}
           >
             <CardSection>
-              <Image
-                src={item.webImage?.url}
-                alt="artwork"
-                radius="sm"
-                fit="contain"
-              />
+              {!isLoading ? (
+                <Image
+                  src={item.webImage?.url}
+                  alt="artwork"
+                  radius="sm"
+                  fit="contain"
+                />
+              ) : (
+                <Loader size="xs" />
+              )}
             </CardSection>
             <Text>{item.longTitle}</Text>
           </Card>

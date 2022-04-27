@@ -16,7 +16,7 @@ export const getDetailledSearch = async ({ searchQuery, page }: QueryTypes) => {
       `https://www.rijksmuseum.nl/api/en/collection?key=${API_KEY}`,
       {
         params: {
-          p: 0,
+          p: page,
           ps: 20,
           ...searchQuery,
         },
