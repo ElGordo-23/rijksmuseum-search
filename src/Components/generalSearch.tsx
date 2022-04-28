@@ -12,7 +12,7 @@ type SearchValues = Pick<SearchValuesObject, 'involvedMaker' | 'searchTerm'>;
 
 export function GeneralSearch() {
   const schema = object({
-    searchTerm: string().required('Please enter a Search'),
+    searchTerm: string(),
   });
 
   const formMethods = useForm<SearchValues>({ resolver: yupResolver(schema) });

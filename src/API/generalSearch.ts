@@ -31,7 +31,8 @@ export const getGeneralSearch = async (
       {
         params: {
           p: page,
-          ps: 30,
+          ps: 21,
+          imgonly: true,
           q: searchTerm,
           involvedMaker: artistName,
         },

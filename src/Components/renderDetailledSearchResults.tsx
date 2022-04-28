@@ -18,6 +18,7 @@ export type SearchValuesObject = Partial<{
   technique: string;
   involvedMaker: string;
   searchTerm: string;
+  toppieces: boolean;
 }>;
 export type SearchValues = {
   searchQuery: SearchValuesObject;
@@ -49,7 +50,6 @@ export function DetailledSearchResults({ searchQuery }: SearchValues) {
             key={item.id}
             withBorder
             sx={{
-              backgroundColor: '#faf8e6',
               maxHeight: 500,
               maxWidth: 350,
               padding: 10,

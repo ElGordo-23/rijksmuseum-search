@@ -1,4 +1,4 @@
-import { Button, Collapse } from '@mantine/core';
+import { Avatar, Badge, Button, Collapse } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
@@ -34,11 +34,21 @@ export function Results() {
 
   const showGeneralResults = !searchQuery && (searchTerm || involvedMaker);
 
+  const avatar = <Avatar alt="Avatar for badge" size={24} mr={5} src={null} />;
+
   return (
     <div>
       <h2>Your search:</h2>
-      <div>{searchTerm}</div>
-      {involvedMaker ? <div>{involvedMaker}</div> : null}
+      {searchTerm ? (
+        <Badge sx={{ marginBottom: 10 }}>{searchTerm}</Badge>
+      ) : null}
+      <br />
+      {involvedMaker ? (
+        <Badge size="lg" leftSection={avatar}>
+          {involvedMaker}
+        </Badge>
+      ) : null}
+      <br />
       <br />
       <Button onClick={() => navigate('/')}>Home</Button>
       <br />

@@ -31,9 +31,9 @@ export function GeneralSearchResults({ searchTerm, involvedMaker }: PropTypes) {
       ) : (
         <SimpleGrid
           breakpoints={[
-            { maxWidth: 'lg', cols: 3, spacing: 'md' },
-            { maxWidth: 'sm', cols: 2, spacing: 'sm' },
-            { maxWidth: 'xs', cols: 1, spacing: 'sm' },
+            { minWidth: 'sm', cols: 1 },
+            { minWidth: 'md', cols: 2 },
+            { minWidth: 1200, cols: 3 },
           ]}
         >
           <Button
@@ -51,7 +51,6 @@ export function GeneralSearchResults({ searchTerm, involvedMaker }: PropTypes) {
               key={item.id}
               withBorder
               sx={{
-                backgroundColor: '#faf8e6',
                 maxHeight: 500,
                 maxWidth: 350,
                 padding: 10,

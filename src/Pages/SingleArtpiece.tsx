@@ -1,4 +1,5 @@
 import {
+  Badge,
   Box,
   ColorSwatch,
   Divider,
@@ -8,6 +9,7 @@ import {
   Title,
 } from '@mantine/core';
 import { useParams } from 'react-router';
+import { Link } from 'react-router-dom';
 import { useSingleArtpiece } from '../API/getSingleArtpiece';
 
 export function SingleArtpiece() {
@@ -18,6 +20,8 @@ export function SingleArtpiece() {
   const swatches = artPiece?.normalizedColors.map((color) => (
     <ColorSwatch color={color.hex} key={color.hex} />
   ));
+
+  console.log(artPiece);
 
   return (
     <Box sx={{ marginTop: 24, marginBottom: 90 }}>
@@ -30,14 +34,15 @@ export function SingleArtpiece() {
         }}
       >
         <Title order={2} sx={{ marginTop: 10 }}>
-          {artPiece?.title}
+          {artPiece?.label.title}
         </Title>
         <Divider my="sm" variant="dotted" />
-        <Title order={3} sx={{ marginTop: 10, marginBottom: 10 }}>
-          {artPiece?.scLabelLine}
+        <Title order={4} sx={{ marginTop: 10, marginBottom: 10 }}>
+          {artPiece?.label.makerLine || artPiece?.scLabelLine}
+          <Badge sx={{ cursor: 'pointer' }}>{artPiece?.principalMaker}</Badge>
         </Title>
         <Text sx={{ marginTop: 10, marginBottom: 15 }}>
-          {artPiece?.description}
+          {artPiece?.label.description || artPiece?.description}
         </Text>
       </Box>
       <Group position="center" spacing="xs" sx={{ marginBottom: 25 }}>

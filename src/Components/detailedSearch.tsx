@@ -1,5 +1,5 @@
-import { Button, Select, TextInput } from '@mantine/core';
-import { useCallback, useMemo, useState } from 'react';
+import { Button, Checkbox, Select, TextInput } from '@mantine/core';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   Controller,
   FormProvider,
@@ -25,6 +25,7 @@ export function DetailedSearch({
   const { register, handleSubmit, getValues } = formMethods;
 
   const [_, setSearchParams] = useSearchParams();
+  const [checked, setChecked] = useState(false);
 
   const [detailledArtistSearchInput, setDetailledArtistSearchInput] = useState(
     getValues('involvedMaker'),
@@ -70,9 +71,10 @@ export function DetailedSearch({
             name="involvedMaker"
             render={({ field }) => (
               <Select
-                placeholder="Type of Object"
+                placeholder="Artist"
                 label="Artist"
                 searchable
+                clearable
                 nothingFound="No options"
                 data={artistSuggestions}
                 {...field}
@@ -88,6 +90,7 @@ export function DetailedSearch({
                 placeholder="Type of Object"
                 label="Type"
                 searchable
+                clearable
                 data={typeSelect}
                 {...field}
               />
@@ -100,6 +103,7 @@ export function DetailedSearch({
                 placeholder="Material of Object"
                 label="Material"
                 searchable
+                clearable
                 data={matertialSelect}
                 {...field}
               />
@@ -112,6 +116,7 @@ export function DetailedSearch({
                 placeholder="Technique used"
                 label="Technique"
                 searchable
+                clearable
                 data={techniqueSelect}
                 {...field}
               />
@@ -124,11 +129,20 @@ export function DetailedSearch({
                 placeholder="Location of Creation"
                 label="Location"
                 searchable
+                clearable
                 data={placeSelect}
                 {...field}
               />
             )}
           />
+          <br />
+          <Checkbox
+            {...register('toppieces')}
+            label="Top pieces only"
+            checked={checked}
+            onChange={(event) => setChecked(event.currentTarget.checked)}
+          />
+          <br />
           <Button type="submit">Search</Button>
         </form>
       </FormProvider>

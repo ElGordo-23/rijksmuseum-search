@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { QueryParamProvider } from 'use-query-params';
+import { ArtistProfilePage } from './Pages/artistProfilePage';
 import { Results } from './Pages/Results';
 import { SearchPage } from './Pages/SearchPage';
 import { SingleArtpiece } from './Pages/SingleArtpiece';
@@ -37,6 +38,7 @@ function App() {
                   path="/artPiece/:objectNumber"
                   element={<SingleArtpiece />}
                 />
+                <Route path="/artistProfile" element={<ArtistProfilePage />} />
               </Routes>
             </QueryParamProvider>
           </Router>

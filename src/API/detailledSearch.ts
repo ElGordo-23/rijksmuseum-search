@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { useQuery } from 'react-query';
+import { resolveTripleslashReference } from 'typescript';
 import { SearchValuesObject } from '../Components/renderDetailledSearchResults';
 import { GeneralSearchResponse } from './generalSearch';
 
@@ -17,7 +18,8 @@ export const getDetailledSearch = async ({ searchQuery, page }: QueryTypes) => {
       {
         params: {
           p: page,
-          ps: 20,
+          ps: 21,
+          imgonly: true,
           ...searchQuery,
         },
       },
