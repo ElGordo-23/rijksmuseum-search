@@ -2,7 +2,7 @@
   "name": "rijksmuseum-search",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://elgordo-23.github.io/",
+  "homepage": "https://elgordo-23.github.io/rijksmuseum-search",
   "dependencies": {
     "@hookform/resolvers": "^2.8.8",
     "@mantine/core": "^4.1.4",
@@ -19,6 +19,7 @@
     "axios": "^0.26.1",
     "dayjs": "^1.11.1",
     "ejs": "^3.1.7",
+    "gh-pages": "^3.2.3",
     "nth-check": "^2.0.1",
     "query-string": "^7.1.1",
     "react": "^18.0.0",
