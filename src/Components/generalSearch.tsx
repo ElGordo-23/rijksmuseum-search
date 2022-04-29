@@ -51,9 +51,9 @@ export function GeneralSearch() {
 
   return (
     <>
-      <h2>General Search</h2>
+      <h2>Search the Rijksmuseum Catalog</h2>
       <FormProvider {...formMethods}>
-        <form onSubmit={handleSubmit(onValid)}>
+        <form onSubmit={handleSubmit(onValid)} data-testid="generalSearchForm">
           <TextInput
             {...register('searchTerm')}
             placeholder="Search"

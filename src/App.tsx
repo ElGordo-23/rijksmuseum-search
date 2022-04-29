@@ -2,8 +2,7 @@ import './App.css';
 import { Container, MantineProvider } from '@mantine/core';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { QueryParamProvider } from 'use-query-params';
+import { Route, Routes } from 'react-router-dom';
 import { ArtistProfilePage } from './Pages/artistProfilePage';
 import { Results } from './Pages/Results';
 import { SearchPage } from './Pages/SearchPage';
@@ -29,19 +28,15 @@ function App() {
         }}
       >
         <Container>
-          <Router>
-            <QueryParamProvider>
-              <Routes>
-                <Route path="/" element={<SearchPage />} />
-                <Route path="/results" element={<Results />} />
-                <Route
-                  path="/artPiece/:objectNumber"
-                  element={<SingleArtpiece />}
-                />
-                <Route path="/artistProfile" element={<ArtistProfilePage />} />
-              </Routes>
-            </QueryParamProvider>
-          </Router>
+          <Routes>
+            <Route path="/" element={<SearchPage />} />
+            <Route path="/results" element={<Results />} />
+            <Route
+              path="/artPiece/:objectNumber"
+              element={<SingleArtpiece />}
+            />
+            <Route path="/artistProfile" element={<ArtistProfilePage />} />
+          </Routes>
         </Container>
       </MantineProvider>
       <ReactQueryDevtools />
