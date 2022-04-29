@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/rijksmuseum-search/static/css/main.073c9b0a.css",
+    "main.js": "/rijksmuseum-search/static/js/main.8bfe5225.js",
+    "static/js/787.84f9491f.chunk.js": "/rijksmuseum-search/static/js/787.84f9491f.chunk.js",
+    "index.html": "/rijksmuseum-search/index.html",
+    "main.073c9b0a.css.map": "/rijksmuseum-search/static/css/main.073c9b0a.css.map",
+    "main.8bfe5225.js.map": "/rijksmuseum-search/static/js/main.8bfe5225.js.map",
+    "787.84f9491f.chunk.js.map": "/rijksmuseum-search/static/js/787.84f9491f.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.073c9b0a.css",
+    "static/js/main.8bfe5225.js"
+  ]
+}
